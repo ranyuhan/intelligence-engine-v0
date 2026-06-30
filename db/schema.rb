@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_30_000400) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_30_000700) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -40,6 +40,22 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_30_000400) do
     t.index ["entity_id"], name: "index_engine_events_on_entity_id"
     t.index ["event_type"], name: "index_engine_events_on_event_type"
     t.index ["occurred_at"], name: "index_engine_events_on_occurred_at"
+  end
+
+  create_table "engine_evidences", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "evidence_type", null: false
+    t.jsonb "metadata", default: {}, null: false
+    t.datetime "observed_at", null: false
+    t.bigint "signal_id", null: false
+    t.text "summary", null: false
+    t.datetime "updated_at", null: false
+    t.decimal "weight", precision: 6, scale: 5, null: false
+    t.index ["evidence_type"], name: "index_engine_evidences_on_evidence_type"
+    t.index ["observed_at"], name: "index_engine_evidences_on_observed_at"
+    t.index ["signal_id", "evidence_type"], name: "index_engine_evidences_on_signal_id_and_evidence_type"
+    t.index ["signal_id"], name: "index_engine_evidences_on_signal_id"
+    t.index ["weight"], name: "index_engine_evidences_on_weight"
   end
 
   create_table "engine_goals", force: :cascade do |t|
@@ -74,7 +90,37 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_30_000400) do
     t.index ["observed_at"], name: "index_engine_observations_on_observed_at"
   end
 
+  create_table "engine_signal_observations", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.jsonb "metadata", default: {}, null: false
+    t.bigint "observation_id", null: false
+    t.string "role"
+    t.bigint "signal_id", null: false
+    t.datetime "updated_at", null: false
+    t.decimal "weight", precision: 6, scale: 5
+    t.index ["observation_id"], name: "index_engine_signal_observations_on_observation_id"
+    t.index ["signal_id", "observation_id"], name: "index_engine_signal_observations_uniqueness", unique: true
+    t.index ["signal_id"], name: "index_engine_signal_observations_on_signal_id"
+  end
+
+  create_table "engine_signals", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "detected_at", null: false
+    t.string "direction"
+    t.jsonb "metadata", default: {}, null: false
+    t.string "signal_type", null: false
+    t.decimal "strength", precision: 6, scale: 5, null: false
+    t.text "summary", null: false
+    t.datetime "updated_at", null: false
+    t.index ["detected_at"], name: "index_engine_signals_on_detected_at"
+    t.index ["signal_type"], name: "index_engine_signals_on_signal_type"
+    t.index ["strength"], name: "index_engine_signals_on_strength"
+  end
+
   add_foreign_key "engine_events", "engine_entities", column: "entity_id"
+  add_foreign_key "engine_evidences", "engine_signals", column: "signal_id"
   add_foreign_key "engine_observations", "engine_entities", column: "entity_id"
   add_foreign_key "engine_observations", "engine_events", column: "event_id"
+  add_foreign_key "engine_signal_observations", "engine_observations", column: "observation_id"
+  add_foreign_key "engine_signal_observations", "engine_signals", column: "signal_id"
 end

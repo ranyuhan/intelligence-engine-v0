@@ -6,6 +6,8 @@ module Engine
 
     belongs_to :event, class_name: "Engine::Event"
     belongs_to :entity, class_name: "Engine::Entity", optional: true
+    has_many :signal_observations, class_name: "Engine::SignalObservation", dependent: :restrict_with_error
+    has_many :signals, through: :signal_observations
 
     validates :observation_type, presence: true
     validates :observed_at, presence: true
