@@ -46,6 +46,24 @@ Do not create a separate top-level engine/ runtime directory unless explicitly r
 
 ⸻
 
+Implementation Order
+
+Do not implement the engine top-down.
+
+Prefer the following sequence:
+
+1. Review the Constitution.
+2. Inspect the current implementation.
+3. Identify architectural gaps.
+4. Propose the smallest change that closes one gap.
+5. Wait for approval.
+6. Implement.
+7. Add tests.
+8. Re-evaluate against the Constitution.
+
+Prefer many small, verifiable iterations over large feature implementations.
+⸻
+
 Boundary Rule
 
 The engine layer must remain domain-independent.

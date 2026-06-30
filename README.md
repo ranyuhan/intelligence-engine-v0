@@ -1,10 +1,88 @@
 # Intelligence Engine v0
 
-A Rails prototype for validating a universal intelligence architecture.
+Welcome.
 
-The prototype separates:
+This repository is a research project investigating whether a universal intelligence engine can continuously build, evaluate, and revise evidence-backed explanatory models of reality through feedback.
 
-```text
+The objective is not simply to build software.
+
+The objective is to discover, through implementation and experimentation, whether this architecture accurately describes how adaptive intelligence should work.
+
+---
+
+##Orientation
+
+Read these documents in order.
+
+### 1. Constitution
+
+**`docs/constitution/ENGINE_CONSTITUTION.md`**
+
+Defines the laws, virtues, and first principles that govern the Intelligence Engine.
+
+This answers:
+
+> **Why does the engine behave this way?**
+
+---
+
+### 2. Prototype Plan
+
+**`docs/prototype/ONE_MONTH_PROTOTYPE_PLAN.md`**
+
+Defines the current experiment.
+
+This answers:
+
+> **What are we trying to prove?**
+
+---
+
+### 3. Behavior Model
+
+**`docs/architecture/BEHAVIOR_MODEL.md`**
+
+Defines how intelligence emerges through interacting feedback loops.
+
+This answers:
+
+> **How does the engine learn?**
+
+---
+
+### 4. Object Model
+
+**`docs/architecture/OBJECT_MODEL.md`**
+
+Defines the engine's core objects and their relationships.
+
+This answers:
+
+> **What does the engine know?**
+
+---
+
+### 5. Research Notes
+
+**`docs/research/`**
+
+Contains:
+
+- RESEARCH_LOG
+- ASSUMPTIONS
+- OPEN_QUESTIONS
+- EXPERIMENTS
+- FAILED_IDEAS
+
+These documents record how reality has changed our understanding over time.
+
+---
+
+## Repository Philosophy
+
+The repository separates three concerns.
+
+```
 Intelligence Engine
         ↓
 Domain Ontology
@@ -12,32 +90,42 @@ Domain Ontology
 Application
 ```
 
-Start with the Constitution:
+The Intelligence Engine contains only universal concepts.
 
-- `docs/constitution/ENGINE_CONSTITUTION.md`
+Domain Packages teach the engine what exists in a specific domain.
 
-Research artifacts:
+Applications expose the engine for a particular use case.
 
-- `docs/research/ASSUMPTIONS.md`
-- `docs/research/OPEN_QUESTIONS.md`
-- `docs/research/EXPERIMENTS.md`
-- `docs/research/FAILED_IDEAS.md`
-- `docs/research/RESEARCH_LOG.md`
+These boundaries should remain independent.
 
-# Intelligence Engine v0
+---
 
-Welcome.
+## Development Philosophy
 
-Before reading any code, read these documents in order:
+The engine is developed through iterative feedback rather than comprehensive upfront design.
 
-1. docs/constitution/ENGINE_CONSTITUTION.md
-2. docs/prototype/ONE_MONTH_PROTOTYPE_PLAN.md
-3. docs/architecture/OBJECT_MODEL.md
+Each implementation cycle follows the same process:
 
-The Constitution defines the principles.
+```
+Observe
+    ↓
+Model
+    ↓
+Implement
+    ↓
+Evaluate
+    ↓
+Revise
+```
 
-The Prototype Plan defines the current experiment.
+The codebase should evolve in the same way the engine itself is designed to learn.
 
-The Architecture documents describe the implementation.
+---
 
-The code should follow the Constitution—not the other way around.
+## Guiding Question
+
+Every architectural decision, pull request, and feature should help answer one question:
+
+> **Can a universal intelligence engine continuously build, evaluate, revise, and appropriately limit evidence-backed explanatory models of reality through feedback?**
+
+If a change does not improve our ability to answer that question, it probably does not belong in the prototype.
