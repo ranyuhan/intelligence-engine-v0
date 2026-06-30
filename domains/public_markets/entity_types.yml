@@ -1,0 +1,9 @@
+entity_types:
+  - company
+  - person
+  - sector
+  - product
+  - competitor
+  - supplier
+  - customer_segment
+  - macro_factor

@@ -1,0 +1,8 @@
+event_types:
+  - earnings_call
+  - sec_filing
+  - investor_day
+  - news
+  - analyst_note
+  - price_movement
+  - personal_note

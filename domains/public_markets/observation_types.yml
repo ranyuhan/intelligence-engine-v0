@@ -1,0 +1,8 @@
+observation_types:
+  - management_commentary
+  - financial_metric
+  - guidance_update
+  - risk_disclosure
+  - strategic_action
+  - market_reaction
+  - user_reflection

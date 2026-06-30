@@ -1,0 +1,15 @@
+signal_types:
+  - revenue_growth
+  - margin_expansion
+  - margin_pressure
+  - pricing_power
+  - demand_acceleration
+  - demand_slowdown
+  - inventory_risk
+  - capex_increase
+  - capex_efficiency
+  - competitive_advantage
+  - management_quality
+  - guidance_raise
+  - guidance_cut
+  - sentiment_shift

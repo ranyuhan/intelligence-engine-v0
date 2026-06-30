@@ -1,0 +1,9 @@
+model_types:
+  - business_quality
+  - competitive_position
+  - growth_driver
+  - risk_factor
+  - management_behavior
+  - capital_allocation
+  - valuation_context
+  - investment_thesis

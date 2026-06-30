@@ -1,0 +1,7 @@
+prediction_types:
+  - revenue_prediction
+  - margin_prediction
+  - guidance_prediction
+  - sentiment_prediction
+  - risk_prediction
+  - thesis_prediction

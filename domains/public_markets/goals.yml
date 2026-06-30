@@ -1,0 +1,7 @@
+goals:
+  engine:
+    - build_increasingly_accurate_models_within_observation_boundary
+  domain:
+    - identify_companies_whose_business_trajectory_diverges_from_consensus
+  application:
+    - generate_calibrated_predictions_to_inform_investment_decisions
