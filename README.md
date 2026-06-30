@@ -38,9 +38,9 @@ This answers:
 
 ---
 
-### 3. Behavior Model
+### 3. Learning Loop
 
-**`docs/architecture/BEHAVIOR_MODEL.md`**
+**`docs/architecture/LEARNING_DYNAMICS.md`**
 
 Defines how intelligence emerges through interacting feedback loops.
 
