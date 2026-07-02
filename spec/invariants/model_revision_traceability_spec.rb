@@ -3,6 +3,8 @@
 require "rails_helper"
 
 RSpec.describe "Model revision traceability", type: :model do
+  subject(:service) { Engine::Pipeline::ReviseModel.new }
+
   def create_model
     goal = Engine::Goal.create!(
       name: "Improve explanatory accuracy",
@@ -107,5 +109,24 @@ RSpec.describe "Model revision traceability", type: :model do
     expect(revision.evidences).to contain_exactly(evidence)
     expect(revision.previous_state).to eq({ "confidence" => 0.4 })
     expect(revision.new_state).to eq({ "confidence" => 0.5 })
+  end
+
+  it "mutates model state only through a persisted revision with linked evidence" do
+    model = create_model
+    evidence = create_evidence
+
+    revision = service.call(
+      model: model,
+      evidence: evidence,
+      outcome: "revised",
+      summary: "Evidence justified a revised explanatory state.",
+      new_state: { "confidence" => 0.6, "coverage" => "expanded" }
+    )
+
+    expect(revision).to be_persisted
+    expect(revision.evidences).to contain_exactly(evidence)
+    expect(revision.previous_state).to eq({})
+    expect(revision.new_state).to eq({ "confidence" => 0.6, "coverage" => "expanded" })
+    expect(model.reload.state).to eq(revision.new_state)
   end
 end
