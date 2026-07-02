@@ -3,7 +3,7 @@
 class CreateEngineEpistemicStates < ActiveRecord::Migration[8.1]
   def change
     create_table :engine_epistemic_states do |t|
-      t.references :model, null: false, foreign_key: { to_table: :engine_models }
+      t.references :model, null: false, foreign_key: { to_table: :engine_models }, index:false
       t.decimal :confidence, precision: 6, scale: 5, null: false, default: 0
       t.decimal :observable_coverage, precision: 6, scale: 5
       t.jsonb :known_unknowns, null: false, default: []

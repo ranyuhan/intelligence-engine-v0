@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_30_000700) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_30_001100) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -25,6 +25,23 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_30_000700) do
     t.index ["entity_type", "external_id"], name: "index_engine_entities_on_entity_type_and_external_id", unique: true
     t.index ["entity_type"], name: "index_engine_entities_on_entity_type"
     t.index ["external_id"], name: "index_engine_entities_on_external_id"
+  end
+
+  create_table "engine_epistemic_states", force: :cascade do |t|
+    t.decimal "confidence", precision: 6, scale: 5, default: "0.0", null: false
+    t.datetime "created_at", null: false
+    t.jsonb "known_unknowns", default: [], null: false
+    t.datetime "last_revised_at"
+    t.jsonb "metadata", default: {}, null: false
+    t.bigint "model_id", null: false
+    t.decimal "observable_coverage", precision: 6, scale: 5
+    t.string "prediction_readiness", default: "not_ready", null: false
+    t.decimal "revision_velocity", precision: 10, scale: 5
+    t.jsonb "surprise_history", default: [], null: false
+    t.datetime "updated_at", null: false
+    t.index ["last_revised_at"], name: "index_engine_epistemic_states_on_last_revised_at"
+    t.index ["model_id"], name: "index_engine_epistemic_states_on_model_id", unique: true
+    t.index ["prediction_readiness"], name: "index_engine_epistemic_states_on_prediction_readiness"
   end
 
   create_table "engine_events", force: :cascade do |t|
@@ -72,6 +89,26 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_30_000700) do
     t.index ["status"], name: "index_engine_goals_on_status"
   end
 
+  create_table "engine_models", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.text "description"
+    t.bigint "entity_id"
+    t.bigint "goal_id", null: false
+    t.text "hypothesis", null: false
+    t.jsonb "metadata", default: {}, null: false
+    t.string "model_type", null: false
+    t.string "name", null: false
+    t.jsonb "state", default: {}, null: false
+    t.string "status", default: "active", null: false
+    t.datetime "updated_at", null: false
+    t.integer "version", default: 1, null: false
+    t.index ["entity_id"], name: "index_engine_models_on_entity_id"
+    t.index ["goal_id", "model_type"], name: "index_engine_models_on_goal_id_and_model_type"
+    t.index ["goal_id"], name: "index_engine_models_on_goal_id"
+    t.index ["model_type"], name: "index_engine_models_on_model_type"
+    t.index ["status"], name: "index_engine_models_on_status"
+  end
+
   create_table "engine_observations", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.bigint "entity_id"
@@ -88,6 +125,37 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_30_000700) do
     t.index ["event_id"], name: "index_engine_observations_on_event_id"
     t.index ["observation_type"], name: "index_engine_observations_on_observation_type"
     t.index ["observed_at"], name: "index_engine_observations_on_observed_at"
+  end
+
+  create_table "engine_revision_evidences", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "evidence_id", null: false
+    t.jsonb "metadata", default: {}, null: false
+    t.bigint "revision_id", null: false
+    t.string "role"
+    t.datetime "updated_at", null: false
+    t.decimal "weight", precision: 6, scale: 5
+    t.index ["evidence_id"], name: "index_engine_revision_evidences_on_evidence_id"
+    t.index ["revision_id", "evidence_id"], name: "index_engine_revision_evidences_uniqueness", unique: true
+    t.index ["revision_id"], name: "index_engine_revision_evidences_on_revision_id"
+  end
+
+  create_table "engine_revisions", force: :cascade do |t|
+    t.string "cause", null: false
+    t.decimal "confidence_delta", precision: 6, scale: 5, default: "0.0", null: false
+    t.datetime "created_at", null: false
+    t.jsonb "metadata", default: {}, null: false
+    t.bigint "model_id", null: false
+    t.jsonb "new_state", null: false
+    t.string "outcome", null: false
+    t.jsonb "previous_state", null: false
+    t.text "summary", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cause"], name: "index_engine_revisions_on_cause"
+    t.index ["created_at"], name: "index_engine_revisions_on_created_at"
+    t.index ["model_id", "created_at"], name: "index_engine_revisions_on_model_id_and_created_at"
+    t.index ["model_id"], name: "index_engine_revisions_on_model_id"
+    t.index ["outcome"], name: "index_engine_revisions_on_outcome"
   end
 
   create_table "engine_signal_observations", force: :cascade do |t|
@@ -117,10 +185,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_30_000700) do
     t.index ["strength"], name: "index_engine_signals_on_strength"
   end
 
+  add_foreign_key "engine_epistemic_states", "engine_models", column: "model_id"
   add_foreign_key "engine_events", "engine_entities", column: "entity_id"
   add_foreign_key "engine_evidences", "engine_signals", column: "signal_id"
+  add_foreign_key "engine_models", "engine_entities", column: "entity_id"
+  add_foreign_key "engine_models", "engine_goals", column: "goal_id"
   add_foreign_key "engine_observations", "engine_entities", column: "entity_id"
   add_foreign_key "engine_observations", "engine_events", column: "event_id"
+  add_foreign_key "engine_revision_evidences", "engine_evidences", column: "evidence_id"
+  add_foreign_key "engine_revision_evidences", "engine_revisions", column: "revision_id"
+  add_foreign_key "engine_revisions", "engine_models", column: "model_id"
   add_foreign_key "engine_signal_observations", "engine_observations", column: "observation_id"
   add_foreign_key "engine_signal_observations", "engine_signals", column: "signal_id"
 end

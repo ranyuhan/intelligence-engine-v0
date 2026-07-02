@@ -71,11 +71,27 @@ RSpec.describe Engine::RevisionEvidence, type: :model do
   end
 
   it "is valid with revision and evidence" do
-    evidence = create_evidence
-    revision = create_revision(evidence)
-    link = revision.revision_evidences.first
+  evidence = create_evidence
+  model = create_model
 
-    expect(link).to be_valid
+  revision = Engine::Revision.new(
+    model: model,
+    cause: "new_evidence",
+    summary: "Evidence changed the model state.",
+    outcome: "strengthened",
+    previous_state: {},
+    new_state: { "confidence" => 0.1 },
+    confidence_delta: 0.1,
+    metadata: {}
+  )
+
+  link = described_class.new(
+    revision: revision,
+    evidence: evidence,
+    metadata: {}
+  )
+
+  expect(link).to be_valid
   end
 
   it "requires revision and evidence" do
