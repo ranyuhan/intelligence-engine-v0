@@ -5,6 +5,8 @@ module Engine
     self.table_name = "engine_evidences"
 
     belongs_to :signal, class_name: "Engine::Signal"
+    has_many :revision_evidences, class_name: "Engine::RevisionEvidence", dependent: :restrict_with_error
+    has_many :revisions, through: :revision_evidences, class_name: "Engine::Revision"
 
     validates :evidence_type, presence: true
     validates :summary, presence: true
